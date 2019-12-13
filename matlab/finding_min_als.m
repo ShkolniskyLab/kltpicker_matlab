@@ -23,10 +23,10 @@ patchNum=sz(2);
 One=ones(1,patchNum);
 
 % % Initial vectors
-SrealNormInf = vecnorm(Sreal,Inf,2);
+SrealNormInf = vecnorm(Sreal,Inf);
 [~,maxCol] = max(SrealNormInf); [~,minCol]=min(SrealNormInf);
 cleanSigTmp = abs(Sreal(:,maxCol)-Sreal(:,minCol));
-SrealNormOne = vecnorm(Sreal,1,2);
+SrealNormOne = vecnorm(Sreal,1);
 [~,minCol]=min(SrealNormOne);
 noiseSigTmp = abs(Sreal(:,minCol));
 S = Sreal-noiseSigTmp*One;

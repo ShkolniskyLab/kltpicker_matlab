@@ -8,7 +8,7 @@ Please subscribe to (http://github.com/amitayeldar/KLTpicker/) for updates about
 
 This package contains an implementation of the KLTpicker as
 described in the paper:
-A. Eldar, B. Landa, and Y. Shkolnisky, "KLT picker: Particle picking using data-driven optimal templates", https://.
+A. Eldar, B. Landa, and Y. Shkolnisky, "KLT picker: Particle picking using data-driven optimal templates", https://arxiv.org/abs/1912.06500.
 
 
 Getting started

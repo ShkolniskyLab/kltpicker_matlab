@@ -7,9 +7,8 @@ function KLTpicker_start
 % This is the first command to be called in any processing workflw.
 % 
 % Amitay Eldar, November 2019.
-
-
-addpath('./matlab'); % set up MATLAB path
+[basedir,~,~]=fileparts(mfilename('fullpath'));
+addpath(fullfile(basedir,'matlab')); % set up MATLAB path
 
 micrograph_addr='';
 while isempty(micrograph_addr)

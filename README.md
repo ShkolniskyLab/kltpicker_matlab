@@ -22,3 +22,8 @@ Getting started
 2. Please read the userManual file in the extracted directory.
 3. Run MATLAB at the extracted directory and type in the MATLAB Command Window:
 KLTpicker_start
+
+Standalone version:
+-------------------
+See userManual for installation and execution instructions.
+

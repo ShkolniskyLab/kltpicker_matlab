@@ -1,0 +1,228 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage{xcolor}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{ragged2e}
+\usepackage{url}
+\usepackage{enumitem}
+\usepackage[margin=3cm]{geometry}
+%\usepackage{dirtytalk}
+
+\newcommand{\floor}[1]{\lfloor #1 \rfloor}
+
+\setlength\parindent{0pt}
+
+\title{KLT picker 1.0 --  user guide}
+\author{Amitay Eldar\footnote{\protect\url{amitayeldar@mail.tau.ac.il}}, Boris Landa, Yoel Shkolnisky\footnote{\protect\url{yoelsh@tauex.tau.ac.il}}}
+\date{December, 2019}
+
+\begin{document}
+
+\maketitle
+
+\section{Downloading and running the KLT picker}\label{sec:downloading}
+
+\subsection{MATLAB package (source code)}
+Running the KLT picker from its source code requires MATLAB to be installed on your system.
+
+\bigskip
+
+Download and extract the package from
+\begin{center}
+\url{https://github.com/amitayeldar/KLTpicker}
+\end{center}
+
+The extracted directory has the following structure:
+\begin{center}
+\begin{tabular}{lp{0.75\textwidth}}
+\textsf{KLTpicker\_start}  & Main script \\
+\textsf{userManual} & Documentation for the package \\
+\textsf{LICENSE} & Package license \\
+\textsf{README} & A short README file  \\
+\textsf{matlab/} & MATLAB source code \\
+\textsf{get10028} & Script to download micrographs for the example of Section~\ref{sec:example}. \\
+\textsf{example/} & Directory used in Section~\ref{sec:example} to demonstrate the KLT picker
+\end{tabular}
+\end{center}
+
+After downloading the package, start MATLAB in the directory of the KLTpicker package and run
+\begin{center}
+\texttt{KLTpicker\_start}
+\end{center}
+
+Using the KLT picker once started is described in Section~\ref{sec:usage}.
+
+\subsection{Standalone application}
+
+The standalone package is a compiled standalone MATLAB program, and does not require MATLAB to be installed on your system. The required MATLAB runtime environment will be installed during the following installation process.
+
+\begin{enumerate}
+\item Download the KLT picker installer from
+\begin{center}
+\url{https://sites.google.com/site/yoelshkolnisky/software}
+\end{center}
+(only available for Linux 64 bit systems).
+
+\item \texttt{cd} into the directory to which the installer was downloaded.
+\item Make sure the installer is runnable by typing
+\begin{center}
+\texttt{chmod a+x ./KLTInstaller\_web.install}
+\end{center}
+\item Run the installer
+\begin{center}
+	\texttt{./KLTInstaller\_web.install}
+\end{center}
+The installation process requires specifying two folders:
+\begin{enumerate}
+\item Destination folder to install the KLT picker, denoted below by \texttt{<KLTfolder>}
+\item Destination folder for MATLAB Runtime, denoted below by \texttt{<MCRfolder>}
+\end{enumerate}
+\item Once installation is done, run the KLT picker using
+\begin{center}
+\texttt{<KLTfolder>/application/run\_KLTpicker.sh <MCRfolder>/v95}
+\end{center}
+
+\texttt{run\_KLTpicker.sh} is a shell script for temporarily setting environment variables and executing the application.
+
+Using the KLT picker once started is described in Section~\ref{sec:usage}.
+
+
+\end{enumerate}
+
+\section{Using the KLT picker}\label{sec:usage}
+The following questions will appear, one by one
+\begin{flushleft}
+\texttt{Enter full path of micrographs MRC file: }
+\end{flushleft}
+Type the path to the directory which contains the micrographs MRC files.
+\begin{flushleft}
+	\texttt{Enter full path of output directory:}
+\end{flushleft}
+Type the path where the particles coordinate files will be saved.
+\begin{flushleft}
+	\texttt{Enter the particle size in pixels:}
+\end{flushleft}
+Type the particle diameter in pixels (more precisely, the diameter of the extracted box).
+\begin{flushleft}
+	\texttt{pick all particles?(Y/N)? [Y] }
+\end{flushleft}
+ Type \texttt{Y} to pick all particles using the optimal threshold derived on the paper. If you type \texttt{N}, then the following question will appear
+ \begin{flushleft}
+ 	\texttt{How many particles to pick: }
+ \end{flushleft}
+Type the number of particles to pick in each micrograph.
+\begin{flushleft}
+	\texttt{Pick noise images?(Y/N)? [N]}
+\end{flushleft}
+Type \texttt{N} if you don't want to pick noise images. If you type \texttt{Y} then the following question will appear
+\begin{flushleft}
+	\texttt{How many noise images to pick:}
+\end{flushleft}
+Type the number of noise images to pick in each micrograph.
+\begin{flushleft}
+	\texttt{Do you want to use the GPU?(Y/N)? [Y] }
+\end{flushleft}
+ Type \texttt{Y} to use the GPUs found on your system, and \texttt{N} to not use them (CPU only).
+
+ \bigskip
+
+ The KLT picker will then start and will display progress notifications.
+ The outputs are the coordinate files (box and star) and a text file summarizing the picking process at the output directory.
+
+ \section{Example}\label{sec:example}
+In this section we demonstrate the use of the KLT picker on 5 micrographs of the EMPIAR-10028 data set (Plasmodium Falciparum 80S ribosome)~\cite{10028} from the EMPIAR repository~\cite{EMPIAR}.
+
+\bigskip
+
+If MATLAB is installed, start MATLAB in the package directory and run
+\begin{flushleft}
+	\texttt{get10028 \thinspace \color{gray}{\# downloading 5 micrographs to  ./example/micrographs directory.}}
+\end{flushleft}
+
+If MATLAB is not installed, download the micrographs manually from
+\begin{center}
+\url{https://www.ebi.ac.uk/pdbe/emdb/empiar/entry/10028/}
+\end{center}
+
+Start the KLT picker as described in Section~\ref{sec:downloading}. For example, if MATLAB is installed, type
+\begin{flushleft}
+	\texttt{KLTpicker\_start}
+\end{flushleft}
+
+\bigskip
+
+Once starting the KLT picker, enter the following input
+\begin{flushleft}
+	\texttt{Enter full path of micrographs MRC file: ./example/micrographs/}
+\end{flushleft}
+\begin{flushleft}
+	\texttt{Enter full path of output directory: ./example/results}
+\end{flushleft}
+\begin{flushleft}
+	\texttt{Output directory does not exist. Create?(Y/N)? [Y] Y}
+\end{flushleft}
+\begin{flushleft}
+	\texttt{Enter the particle size in pixels: 300}
+\end{flushleft}
+\begin{flushleft}
+	\texttt{pick all particles?(Y/N)? [Y]  Y}
+\end{flushleft}
+\begin{flushleft}
+	\texttt{Pick noise images?(Y/N)? [N] N}
+\end{flushleft}
+\begin{flushleft}
+	\texttt{Do you want to use the GPU?(Y/N)? [Y] Y}
+\end{flushleft}
+
+Once the KLT picker has finished, it will display the massage: \texttt{Finished the picking successfully}. In order to display the picking results in EMAN~\cite{eman}, open a terminal in the package directory and create a new directory named \texttt{eman}, using the command
+\begin{flushleft}
+\texttt{mkdir eman}
+\end{flushleft}
+Change directory  to \texttt{eman} and enter the following commands one by one:
+\begin{flushleft}
+	\texttt{e2rawdata.py ../example/micrographs/*.mrc --invert --edgenorm --xraypixel --ctfest --apix=1.0 --voltage=200.0 --cs=2.0 --ac=10.0 --threads=4 --defocusmin=0.6 --defocusmax=4.0}
+\end{flushleft}
+\begin{flushleft}
+	\texttt{e2import.py ../example/results/pickedParticlesParticleSize300/box/*.box --import\_boxes --box\_type=boxes}
+\end{flushleft}
+\begin{flushleft}
+	\texttt{e2boxer.py --allmicrographs --boxsize=300 --ptclsize=300 --apix=1.0 --no\_ctf --gui --threads=4}
+\end{flushleft}
+ In order to display the picking results of the \textbf{first} micrograph in RELION~\cite{relion}, open the terminal in the package directory and create a new directory named \texttt{relion}, using the command
+\begin{flushleft}
+\texttt{mkdir relion}
+\end{flushleft}
+Change directory  to \texttt{relion} and enter the following command
+ \begin{flushleft}
+ 	\texttt{relion\_display --i ./example/micrographs/001.mrc --coords ./example/results/pickedParticlesParticleSize300/star/001.star --scale 0.15 --particle\_radius 150 --angpix 1 --lowpass 20 --pick}
+ \end{flushleft}
+ In order to display the picking results of the n'th micrograph change   \texttt{001.mrc}  and \texttt{001.star} in the above command to \texttt{00n.mrc} and  \texttt{00n.star}.
+
+
+\section{Citation}
+If you use the KLT picker, please cite \emph{KLT picker: Particle picking using data-driven optimal templates}, available at \url{https://arxiv.org/abs/1912.06500}.
+
+\begin{thebibliography}{9}
+\bibitem{EMPIAR}
+Iudin, A., Korir, P., Salavert-Torres, J., Kleywegt, G., and Patwardhan,
+ A. (2016). \textit{EMPIAR: A public archive for raw electron microscopy image data}.
+ Nature Methods, 13.
+
+\bibitem{10028}
+Wong, Wilson and Bai, Xiao-chen and Brown, Alan and Fernandez, Israel S and Hanssen, Eric and Condron, Melanie and Tan, Yan Hong and Baum, Jake and Scheres, Sjors H W. (2014). \textit{Cryo-EM structure of the Plasmodium falciparum 80S ribosome bound to the anti-protozoan drug emetine}.
+Wong et al. eLife ,3,e03080.
+
+\bibitem{eman}
+G. Tang, L. Peng, P.R. Baldwin, D.S. Mann, W. Jiang, I. Rees \& S.J. Ludtke. (2007). \textit{EMAN2: an extensible image processing suite for electron microscopy}.
+Journal of structural biology, 157, 38-46.
+
+\bibitem{relion}
+Scheres, Sjors HW. (2015). \textit{Semi-automated selection of cryo-EM particles in RELION 1.3}.
+Journal of structural biology, 128, 114-122.
+
+\end{thebibliography}
+
+\end{document}

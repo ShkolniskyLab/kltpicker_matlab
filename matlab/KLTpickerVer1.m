@@ -205,7 +205,10 @@ parfor expNum = 1:numOfMicro
     % Report progress
     endT=clock;
     data=struct;
-    data.i=expNum; data.n_mics=numOfMicro; data.t=etime(endT,startT);
+    data.i=expNum; 
+    data.n_mics=numOfMicro; 
+    data.t=etime(endT,startT);
+    data.numOfPickedPar=numOfPickedPar;
     send(progressQ,data);
 end
 disp("Finished the picking successfully");
@@ -231,28 +234,44 @@ end
 
 function print_progress(data)
     persistent tot_mic
+    persistent tot_par
     persistent start_time
+    persistent remaining_time
+
     
     if isempty(tot_mic)
-        tot_mic = 0;
+        tot_mic = 0;  % Total number of micrographs processed
     end
     
+    if isempty(tot_par)
+        tot_par = 0;  % Total number of particles picked
+    end
+        
     if isempty(start_time)
         start_time=clock; %Timestamp of starting time
     end
+
+    if isempty(remaining_time)
+        remaining_time=0; % Estimated time left for processing
+    end
     
     tot_mic=tot_mic+1;
+    tot_par=tot_par+data.numOfPickedPar;
     tot_time=etime(clock,start_time);
-    avg_time=tot_time/tot_mic;
-    remaining_time=(data.n_mics-tot_mic)*avg_time;
-    
+    avg_time=tot_time/tot_mic; % Average processing time per micrograph
+        
     p=gcp('nocreate');
     if tot_mic > 2*p.NumWorkers
-        fprintf('Done picking from micrograph %04d (%d/%d) in %3.0f secs (ETA %.0f mins)\n',...
-            data.i,tot_mic,data.n_mics,data.t,remaining_time/60);
-    else % Don't print ETA for the first 5 micrographs
-        fprintf('Done picking from micrograph %04d (%d/%d) in %3.0f secs (ETA [still estimating])\n',...
-            data.i,tot_mic,data.n_mics,data.t);
+        t_est = (data.n_mics-tot_mic)*avg_time; % Current estimate for remaining time.
+        remaining_time= 0.6*remaining_time + 0.4 * t_est; % Smooth remaining time.
+        fprintf('Done micrograph %04d (%d/%d) in %3.0f secs (ETA %.0f mins). Picked so far %d particles.\n',...
+            data.i,tot_mic,data.n_mics,data.t,remaining_time/60,tot_par);
+    else % Don't print ETA for the first micrographs
+        remaining_time=(data.n_mics-tot_mic)*avg_time; % Not enough 
+            % micrographs yet to smooth remaining time, so make a crude
+            % estimate.
+        fprintf('Done micrograph %04d (%d/%d) in %3.0f secs (ETA [still estimating]). Picked so far %d particles.\n',...
+            data.i,tot_mic,data.n_mics,data.t,tot_par);
     end
 
 end

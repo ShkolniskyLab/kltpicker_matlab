@@ -13,7 +13,7 @@ Subscribe to
 for updates about the KLTpicker.
 
 Please cite the following paper when using this package:
-A. Eldar, B. Landa, and Y. Shkolnisky, "KLT picker: Particle picking using data-driven optimal templates", https://arxiv.org/abs/1912.06500.
+A. Eldar, B. Landa, and Y. Shkolnisky, "KLT picker: Particle picking using data-driven optimal templates", Journal of Structural Biology, accetpted for publication.
 
 
 Getting started

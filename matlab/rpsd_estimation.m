@@ -1,4 +1,4 @@
-function [apprxCleanPsd,apprxNoisePsd,noiseVarApprx,R,apprxScaling,stopPar]= rpsd_estimation(noiseMc,patchSz,maxIter)
+function [apprxCleanPsd,apprxNoisePsd,noiseVarApprx,R,apprxScaling,stopPar]= rpsd_estimation(noiseMc,patchSz,maxIter,gpu_use)
 %
 % RPSD estimation
 % Approximate Clean and Noise RPSD per micrograph.
@@ -80,8 +80,12 @@ Eps = 10^(-2); % convergence term
 
 %% Apprx noisePsd
 % first apprx noiseVar
-stedMatGpu = stdfilt(gpuArray(noiseMc),ones(patchSz));
-stedMat = gather(stedMatGpu);
+if gpu_use ==1
+    stedMatGpu = stdfilt(gpuArray(noiseMc),ones(patchSz));
+    stedMat = gather(stedMatGpu);
+else
+    stedMat = stdfilt(noiseMc,ones(patchSz));
+end
 varMat = stedMat.^2;
 cut = (patchSz-1)/2 +1; % we take in considiration only whole blocks
 varMat = varMat(cut:end-cut,cut:end-cut);

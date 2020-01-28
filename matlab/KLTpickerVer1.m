@@ -160,7 +160,7 @@ parfor expNum = 1:numOfMicro
     %% Re estimating particle and noise RPSD
     noiseMc = noiseMc - mean(noiseMc(:));
     noiseMc = noiseMc/norm(noiseMc,'fro'); % normalization; 
-    [apprxCleanPsd,apprxNoisePsd,noiseVar,R,~,stopPar] = rpsd_estimation(noiseMc,patchSz,maxIter);
+    [apprxCleanPsd,apprxNoisePsd,noiseVar,R,~,stopPar] = rpsd_estimation(noiseMc,patchSz,maxIter,gpu_use);
     if stopPar==1 % maxIter happend, skip to next micro graph
         continue
     end 

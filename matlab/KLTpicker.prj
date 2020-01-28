@@ -3,12 +3,12 @@
     <param.appname>KLTpicker</param.appname>
     <param.icon />
     <param.icons />
-    <param.version>1.0</param.version>
+    <param.version>1.1</param.version>
     <param.authnamewatermark>Amitay Eldar, Boris Landa, Yoel Shkolnisky</param.authnamewatermark>
     <param.email>amitayeldar@mail.tau.ac.il</param.email>
     <param.company>Tel Aviv University</param.company>
     <param.summary>KLT Picker: Particle Picking Using Data-Driven Optimal Templates</param.summary>
-    <param.description />
+    <param.description>Built from commit 9dd92d0</param.description>
     <param.screenshot />
     <param.guid />
     <param.installpath.string>/Tel_Aviv_University/KLTpicker/</param.installpath.string>
@@ -53,8 +53,6 @@ ${LD_LIBRARY_PATH}:MR/v95/runtime/glnxa64:MR/v95/bin/glnxa64:MR/v95/sys/os/glnxa
     <unset>
       <param.icon />
       <param.icons />
-      <param.version />
-      <param.description />
       <param.screenshot />
       <param.guid />
       <param.installpath.string />

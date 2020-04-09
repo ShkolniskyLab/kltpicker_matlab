@@ -21,7 +21,7 @@ function [apprxCleanPsd,apprxNoisePsd,noiseVarApprx,R,apprxScaling,stopPar]= rps
 
 
 % initial parameters
-microSz = size(noiseMc,1);
+microSz = min(size(noiseMc));
 m = floor(microSz/patchSz); % Number of patches on each raw and coulomn.
 M = m^2;% Total number of patches for each micrographs.
 L = patchSz; % Number of radial RPSD samples 

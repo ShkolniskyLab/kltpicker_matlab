@@ -60,8 +60,8 @@ function [numOfPickedPar,numOfPickedNoise] = picking_from_scoring_mat(logTestN,p
             colIdxB = colIdx-i_col;
             Rsquare = rowIdxB.^2+colIdxB.^2;
             scoringMat(Rsquare<=(rDel^2)) = -inf;
-            fprintf(particlesCordinateBox,'%i\t%i\t%i\t%i\n',(1/mgScale)*(i_colPatch - floor(patchSzPickBox/2)),(mgBigSz(1)+1)-(1/mgScale)*(i_rowPatch + floor(patchSzPickBox/2)),(1/mgScale)*patchSzPickBox,(1/mgScale)*patchSzPickBox);
-            fprintf(particlesCordinateStar,'%i\t%i\t%i\n',(1/mgScale)*i_colPatch,(mgBigSz(1)+1)-(1/mgScale)*i_rowPatch,pMax/logMax);
+            fprintf(particlesCordinateBox,'%.0f\t%.0f\t%.0f\t%.0f\n',(1/mgScale)*(i_colPatch - floor(patchSzPickBox/2)),(mgBigSz(1)+1)-(1/mgScale)*(i_rowPatch + floor(patchSzPickBox/2)),(1/mgScale)*patchSzPickBox,(1/mgScale)*patchSzPickBox);
+            fprintf(particlesCordinateStar,'%.0f\t%.0f\t%.5f\n',(1/mgScale)*i_colPatch,(mgBigSz(1)+1)-(1/mgScale)*i_rowPatch,pMax/logMax);
             numOfPickedPar = numOfPickedPar + 1;
         end
     else
@@ -78,8 +78,8 @@ function [numOfPickedPar,numOfPickedNoise] = picking_from_scoring_mat(logTestN,p
             colIdxB = colIdx-i_col;
             Rsquare = rowIdxB.^2+colIdxB.^2;
             scoringMat(Rsquare<=(rDel^2)) = -inf;
-            fprintf(particlesCordinateBox,'%i\t%i\t%i\t%i\n',(1/mgScale)*(i_colPatch - floor(patchSzPickBox/2)),(mgBigSz(1)+1)-(1/mgScale)*(i_rowPatch + floor(patchSzPickBox/2)),(1/mgScale)*patchSzPickBox,(1/mgScale)*patchSzPickBox);
-            fprintf(particlesCordinateStar,'%i\t%i\t%i\n',(1/mgScale)*i_colPatch,(mgBigSz(1)+1)-(1/mgScale)*i_rowPatch,pMax/logMax);
+            fprintf(particlesCordinateBox,'%.0f\t%.0f\t%.0f\t%.0f\n',(1/mgScale)*(i_colPatch - floor(patchSzPickBox/2)),(mgBigSz(1)+1)-(1/mgScale)*(i_rowPatch + floor(patchSzPickBox/2)),(1/mgScale)*patchSzPickBox,(1/mgScale)*patchSzPickBox);
+            fprintf(particlesCordinateStar,'%.0f\t%.0f\t%.5f\n',(1/mgScale)*i_colPatch,(mgBigSz(1)+1)-(1/mgScale)*i_rowPatch,pMax/logMax);
             iterPick = iterPick + 1;
             numOfPickedPar = numOfPickedPar + 1;
         end
@@ -118,8 +118,8 @@ function [numOfPickedPar,numOfPickedNoise] = picking_from_scoring_mat(logTestN,p
             colIdxB = colIdx-i_col;
             Rsquare = rowIdxB.^2+colIdxB.^2;
             scoringMat(Rsquare<=(rDel^2)) = inf;
-            fprintf(noiseImagesCordinateBox,'%i\t%i\t%i\t%i\n',(1/mgScale)*(i_colPatch - floor(patchSzPickBox/2)),(mgBigSz(1)+1)-(1/mgScale)*(i_rowPatch + floor(patchSzPickBox/2)),(1/mgScale)*patchSzPickBox,(1/mgScale)*patchSzPickBox);
-            fprintf(noiseImagesCordinateStar,'%i\t%i\n',(1/mgScale)*i_colPatch,(mgBigSz(1)+1)-(1/mgScale)*i_rowPatch);
+            fprintf(noiseImagesCordinateBox,'%.0f\t%.0f\t%.0f\t%.0f\n',(1/mgScale)*(i_colPatch - floor(patchSzPickBox/2)),(mgBigSz(1)+1)-(1/mgScale)*(i_rowPatch + floor(patchSzPickBox/2)),(1/mgScale)*patchSzPickBox,(1/mgScale)*patchSzPickBox);
+            fprintf(noiseImagesCordinateStar,'%.0f\t%.0f\n',(1/mgScale)*i_colPatch,(mgBigSz(1)+1)-(1/mgScale)*i_rowPatch);
             iterPick = iterPick + 1;
             numOfPickedNoise = numOfPickedNoise + 1;
         end

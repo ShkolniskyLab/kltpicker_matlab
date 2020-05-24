@@ -35,8 +35,8 @@ sqrt_diag_quadNys = sqrt(diag(quadNys));
 
 for N = 0:maxOrder-1
     Hnodes = sqrt_rr.*(JrRho(:,:,N+1)*(d_rho_psd_quadKer)*(JrRho(:,:,N+1))');
-    tmp(:,:,N+1) = sqrt_diag_quadNys*Hnodes*sqrt_diag_quadNys;
-    [V,D] = eig(tmp(:,:,N+1)); % find eig for similar symetric mat we will fix eig fun later  
+    tmp = sqrt_diag_quadNys*Hnodes*sqrt_diag_quadNys;
+    [V,D] = eig(tmp); % find eig for similar symetric mat we will fix eig fun later  
     D = real(D);% imag val is theoriticly impossible
     [D,I] = sort(diag(D),'descend'); V = V(:,I); % sorting. note that D retruned as vector.
     D(abs(D)<eps) = 0; V(:,D==0) = 0; % this vlues can couse numeric problems;

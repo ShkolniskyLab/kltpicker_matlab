@@ -1,11 +1,11 @@
-function [eigFun,eigVal] = construct_klt_templates(rSampLength,rho,quadKer,quadNys,rr,sqrtrSampr,JrRho,Jsamp,cosine,sine,...
-                            numOfQuadNys,maxOrder,psd,precentOfEigen,gpu_use)
+function [eigFun,eigVal] = construct_klt_templates(rho,quadKer,quadNys,rr,sqrtrSampr,JrRho,Jsamp,cosine,sine,...
+                            numOfQuadNys,maxOrder,psd,precentOfEigen,idxRsamp,gpu_use)
 % Constructing the KLTpicker templates as the eigenfunctions of a given kernel.
 % 
 % Amitay Eldar, Dec 2017
 % 
 % Input parameters:
-% rSampLength       See KLTpicker preprocess for description of the following inputs   
+% See KLTpicker preprocess for description of the following inputs   
 % rho
 % quadKer
 % quadNys
@@ -33,10 +33,10 @@ sqrt_rr = sqrt(rr);
 d_rho_psd_quadKer = diag(rho).*diag(psd).*diag(quadKer);
 sqrt_diag_quadNys = sqrt(diag(quadNys)); 
 
-parfor N = 0:maxOrder-1
+for N = 0:maxOrder-1
     Hnodes = sqrt_rr.*(JrRho(:,:,N+1)*(d_rho_psd_quadKer)*(JrRho(:,:,N+1))');
-    tmp = sqrt_diag_quadNys*Hnodes*sqrt_diag_quadNys;
-    [V,D] = eig(tmp); % find eig for similar symetric mat we will fix eig fun later  
+    tmp(:,:,N+1) = sqrt_diag_quadNys*Hnodes*sqrt_diag_quadNys;
+    [V,D] = eig(tmp(:,:,N+1)); % find eig for similar symetric mat we will fix eig fun later  
     D = real(D);% imag val is theoriticly impossible
     [D,I] = sort(diag(D),'descend'); V = V(:,I); % sorting. note that D retruned as vector.
     D(abs(D)<eps) = 0; V(:,D==0) = 0; % this vlues can couse numeric problems;
@@ -63,7 +63,7 @@ end
 
 %% Sampeling eig fun
 eigVal = zeros(1,2*lastEigIdx); %if N==0 we take one fun, if N~=0 we take two. for prelocate we take max.
-eigFun = zeros(rSampLength,2*lastEigIdx); %if N==0 we take one fun, if N~=0 we take two. for prelocate we take max.
+eigFun = zeros(size(cosine,1),2*lastEigIdx); %if N==0 we take one fun, if N~=0 we take two. for prelocate we take max.
 count = 1;
 for i = 1:lastEigIdx
     order = C_idx(i)-1; % note we start from order zero;
@@ -85,10 +85,12 @@ for i = 1:lastEigIdx
         vNys = (Hsamp*(quadNys.* vCorrect)) * (1/eigValTot(i)); 
     end
     if order==0
+        vNys = reshape(vNys(idxRsamp),size(idxRsamp));
         eigFun(:,count) = (1/sqrt(2*pi))*vNys;
         eigVal(count) = eigValTot(i);
         count = count+1;
     else
+        vNys = reshape(vNys(idxRsamp),size(idxRsamp));
         eigFun(:,count) = sqrt((1/pi))*vNys.*cosine(:,order+1);
         eigVal(count) = eigValTot(i);
         count = count+1;

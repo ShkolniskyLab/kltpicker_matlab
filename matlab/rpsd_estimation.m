@@ -31,7 +31,7 @@ S = zeros(L,M); % matrix of RPSD samples
 % for scaling the RPSD
 T = 1; % Nyquist sampling rate
 bandLimit = pi/T;
-numOfQuad = 2^9;
+numOfQuad = 2^7;
 [quad,nodes] = lgwt(numOfQuad,-bandLimit,bandLimit);
 quad = flipud(quad); nodes = flipud(nodes);
 X = repmat(quad',numOfQuad,1);
@@ -96,7 +96,7 @@ noiseVarApprx = mean(varVec(1:j));
 % approximate varience via RPSD 
 T = 1; % Nyquist sampling rate
 bandLimit = pi/T;
-numOfQuad = 2^12;
+numOfQuad = 2^7;
 [quad,nodes] = lgwt(numOfQuad,-bandLimit,bandLimit);
 quad = flipud(quad); nodes = flipud(nodes);
 X = repmat(quad',numOfQuad,1);

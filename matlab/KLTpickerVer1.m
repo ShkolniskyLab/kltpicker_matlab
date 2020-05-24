@@ -66,11 +66,13 @@ if preProcessStage == 1
     x = single(-radMax:1:radMax);
     [X,Y] = meshgrid(x);
     radMat = sqrt(X.^2+Y.^2); theta = atan2(Y,X);
+    szRadMat = size(radMat);
     name=[' max order ',num2str(maxOrder),' precentOfEig ',num2str(precentOfEig)]; % for figures
-    rSamp = radMat(:);
+%     rSamp = radMat(:);
+    [rSamp,~,idxRsamp] = unique(radMat(:));
     theta = theta(:);
-    numOfQuadKer =2^10;
-    numOfQuadNys = 2^10;
+    numOfQuadKer =2^7;
+    numOfQuadNys = 2^7;
     [rho,quadKer] = lgwt(numOfQuadKer,0,bandLimit);
     rho = flipud(single(rho)); quadKer = flipud(single(quadKer)); 
     [r,quadNys] = lgwt(numOfQuadNys,0,radMax);
@@ -95,6 +97,7 @@ if preProcessStage == 1
             sine(:,N+1) = single(sin(N*theta));
         end
     end
+    
 end
 disp('Preprocess finished');
 
@@ -189,12 +192,16 @@ parfor expNum = 1:numOfMicro
         figName = ['Clean Sig Samp at nodes ',name];
         title(figName);
     end
-    [eigFun,eigVal] = construct_klt_templates(length(rSamp),rho,quadKer,quadNys,rr,sqrtrSampr,JrRho,Jsamp,cosine,sine,numOfQuadNys,maxOrder,psd,precentOfEig,gpu_use);
+    [eigFun,eigVal] = construct_klt_templates(rho,quadKer,quadNys,rr,sqrtrSampr,JrRho,Jsamp,cosine,sine,numOfQuadNys,maxOrder,psd,precentOfEig,idxRsamp,gpu_use);
    if size(eigFun,2) < MaxNumOfFun 
         numOfFun = size(eigFun,2);
    else
         numOfFun = MaxNumOfFun;
    end
+    for i = 1:size(eigFun,2)
+       
+%         tmpFun(:,:,i) = reshape(eigFunStat(:,i),patchSzFun,patchSzFun);
+    end
 
 
     %% particle detection
@@ -202,7 +209,6 @@ parfor expNum = 1:numOfMicro
     microNames{expNum} = microName;
     pickedParPerMic(expNum) = numOfPickedPar;
     pickedNoisePerMic(expNum) = numOfPickedNoise;
-    
     % Report progress
     endT=clock;
     data=struct;
@@ -211,6 +217,7 @@ parfor expNum = 1:numOfMicro
     data.t=etime(endT,startT);
     data.numOfPickedPar=numOfPickedPar;
     send(progressQ,data);
+
 end
 disp("Finished the picking successfully");
 message = ['Picked ', num2str(sum(pickedParPerMic)),' particles and ',num2str(sum(pickedNoisePerMic)),' noise images out of ',num2str(numOfMicro),' micrographs.'];

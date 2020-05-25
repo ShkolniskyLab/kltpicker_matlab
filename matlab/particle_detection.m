@@ -42,40 +42,39 @@ function [numOfPickedPar,numOfPickedNoise] = particle_detection(noiseMc,eigFun,e
     kapa = ar*diag(eigValStat)*ar'+noiseVar*eye(numOfFun);
     kapaInv = inv(kapa);
     Tmat=(1/noiseVar)*eye(numOfFun)-kapaInv;
+    [P,D] = eig(Tmat);
+    Pfull = zeros(size(Q)); 
+    Pfull(1:size(Tmat,1),1:1:size(Tmat,2)) = P;
     mu = logdet((1/noiseVar)*kapa);
+    noiseMcGpu = gpuArray(single(noiseMc));
 
     % Iterating on the patches
     lastBlockRow = mcSz(1)-patchSzFun+1;
     lastBlockCol = mcSz(2)-patchSzFun+1;
     numOfPatchRow = length(1:1:lastBlockRow);
     numOfPatchCol = length(1:1:lastBlockCol);
+    
+    % Computes Loglikelyhood test of each patch with conv
+    QP = Q*Pfull;
+    if gpu_use==1
+        logTestMat = gpuArray(zeros(numOfPatchRow,numOfPatchCol));
+    else
+        logTestMat = zeros(numOfPatchRow,numOfPatchCol);
+    end
 
-    % Computing the Loglikelyhood test of each patch with conv
-    V = single(zeros(numOfPatchRow,numOfPatchCol,numOfFun));
-    cnt=0;
     for i = 1:numOfFun
-        cnt = cnt+1;
-        qtmp = reshape(Q(:,i),patchSzFun,patchSzFun);
-        qtmp = qtmp - mean(qtmp(:));
-        qtmp = flip(flip(qtmp,1),2);
+        qptmp = reshape(QP(:,i),patchSzFun,patchSzFun); 
+        qptmp = flip(flip(qptmp,1),2);
         if gpu_use==1
-            noiseMcGpu = gpuArray(single(noiseMc));
-            vtmp = conv2(noiseMcGpu,qtmp,'valid');
-            V(:,:,i) = single(gather(vtmp));
+            scoreTmp = conv2(noiseMcGpu,qptmp,'valid');  % compute the ith component of the diagonelized bilinear form
+            logTestMat = logTestMat + D(i,i)*abs(scoreTmp.^2); % D(i,i) is real.
         else
-            vtmp = conv2(noiseMc,qtmp,'valid');
-            V(:,:,i) = single(vtmp);
+            scoreTmp = conv2(noiseMcGpu,qptmp,'valid'); % compute the ith component of the diagonelized bilinear form
+            logTestMat = logTestMat + D(i,i)*abs(scoreTmp.^2);% D(i,i) is real.
         end
-
     end
-    logTestMat = zeros(numOfPatchRow,numOfPatchCol);
-    cnt=0;
-    for j=1:numOfPatchCol
-        cnt=cnt+1;
-        Vc = reshape(V(:,j,:),numOfPatchRow,numOfFun,1);
-        logTestMat(:,j)=sum((Vc*Tmat).*Vc,2)-mu;
-    end
-
+    logTestMat = gather(logTestMat)-mu;
+    % this part is for centering
     patchSzN = patchSzFun;
     if gpu_use==1
         neigh = gpuArray(ones(patchSzN));

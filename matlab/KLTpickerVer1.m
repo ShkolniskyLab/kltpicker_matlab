@@ -105,6 +105,7 @@ disp('Preprocess finished');
 disp("Starting particle picking from micrographs")
 
 % Initialize queue for progress messages
+print_progress % Call without paramters to reset all progress variables
 progressQ=parallel.pool.DataQueue;
 afterEach(progressQ, @print_progress); % function defined at the end
 
@@ -245,7 +246,15 @@ function print_progress(data)
     persistent tot_par
     persistent start_time
     persistent remaining_time
-
+    
+    % If no arguments are given to the function, then reset all variables.
+    if nargin==0
+        tot_mic=[];
+        tot_par=[];        
+        start_time=[];
+        remaining_time=[];
+        return
+    end        
     
     if isempty(tot_mic)
         tot_mic = 0;  % Total number of micrographs processed

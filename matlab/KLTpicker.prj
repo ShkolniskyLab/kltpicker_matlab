@@ -3,12 +3,12 @@
     <param.appname>KLTpicker</param.appname>
     <param.icon />
     <param.icons />
-    <param.version>1.11</param.version>
+    <param.version>1.21</param.version>
     <param.authnamewatermark>Amitay Eldar, Boris Landa, Yoel Shkolnisky</param.authnamewatermark>
     <param.email>amitayeldar@mail.tau.ac.il</param.email>
     <param.company>Tel Aviv University</param.company>
     <param.summary>KLT Picker: Particle Picking Using Data-Driven Optimal Templates</param.summary>
-    <param.description>Built from commit bd7c623</param.description>
+    <param.description>Built from commit 4635e89</param.description>
     <param.screenshot />
     <param.guid />
     <param.installpath.string>/Tel_Aviv_University/KLTpicker/</param.installpath.string>

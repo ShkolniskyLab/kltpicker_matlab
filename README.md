@@ -30,6 +30,8 @@ See userManual for installation and execution instructions.
 Revision History:
 -----------------
 
+1.21	Some more speedup.
+
 1.2 	Significant speedup.
 
 1.11	Fix bug in loading box files into RELION.
